@@ -1,0 +1,62 @@
+=== RUN 001 — Plumbing Check (Local) ===
+Date           : 2026-11-21
+Script         : tabpfn_deletion_audit.py  (stand-in mode, RandomForest)
+Python         : 3.14.0
+sklearn        : 1.9.1  |  numpy 2.5.5  |  pandas 3.1.1  |  scipy 1.18.1
+Dataset        : Iris (sklearn built-in)
+Dataset hash   : 8145f023f195d965e6ca3d836e72a3ec
+Random seed    : 42
+N trials       : 20
+Deleted rows   : [72,76,20,101,93,80,14,8,62,55,96,98,50,84,9,77,107,42,69,54]
+
+RESULTS (stand-in only — NOT thesis evidence):
+  MAD mean=0.11500  std=0.09734  max=0.30000  min=0.02000
+  L2  mean=0.01034  std=0.00833
+  Wilcoxon statistic=210.0, p < 0.0001  (reported as 0.0000 in script — corrected)
+
+CONCLUSION:
+  Pipeline correctly detects Path A != Path B.
+  Mechanism isolated: stale StandardScaler statistics.
+  RandomForest is NOT truly scale-invariant when scaler differs
+  between train and test transformation (see notes).
+
+NOTES:
+  - Earlier prediction that MAD=0 for RandomForest was INCORRECT.
+    Tree-based models show non-zero MAD when stale vs fresh scalers
+    produce different floating-point split thresholds.
+  - Blind baseline NOT run in this version. Add before claiming signal.
+  - 20 trials, 1 seed. Insufficient for thesis claims.
+
+STATUS: Plumbing confirmed. Proceed to Run 002 (Colab, real TabPFN).
+
+=== RUN 002 — TEMPLATE (fill in after Colab run) ===
+Date           :
+Script         : tabpfn_deletion_audit_colab.ipynb (real TabPFN)
+Python         :                   <- from Cell 1 output
+tabpfn version :                   <- from Cell 3 output
+sklearn version:
+numpy version  :
+Device         :                   <- cpu or T4 GPU
+Dataset        : Iris (sklearn built-in)
+Dataset hash   :                   <- must match 8145f023f195d965e6ca3d836e72a3ec
+Random seed    : 42
+N trials       : 20
+
+RESULTS (real TabPFN — thesis evidence if methodology is complete):
+  MAD mean=      std=      max=      min=
+  L2  mean=      std=
+  Blind baseline MAD mean=      std=
+  Excess MAD (real - blind) =
+  Wilcoxon statistic=     p=
+  Path A mean time=       Path B mean time=
+  Overhead of clean rebuild=
+
+CONCLUSION:
+  [fill in after run]
+
+CAVEATS CHECKED:
+  [ ] Mechanism isolated: stale StandardScaler statistics only
+  [ ] Does NOT prove TabPFN internally memorises rows
+  [ ] Blind baseline included
+  [ ] 20 trials is pilot; 50+ trials x 3 seeds needed for thesis
+  [ ] Differentiated from tabcustody in writeup
