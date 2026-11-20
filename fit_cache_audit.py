@@ -143,7 +143,7 @@ def build_tabpfn(fit_mode: str) -> TabPFNClassifier:
     return TabPFNClassifier(
         n_estimators=TABPFN_N_ESTIMATORS,
         device=DEVICE,
-        seed=RANDOM_SEED,
+        random_state=RANDOM_SEED,
         fit_mode=fit_mode,
     )
 
