@@ -29,34 +29,51 @@ NOTES:
 
 STATUS: Plumbing confirmed. Proceed to Run 002 (Colab, real TabPFN).
 
-=== RUN 002 — TEMPLATE (fill in after Colab run) ===
-Date           :
-Script         : tabpfn_deletion_audit_colab.ipynb (real TabPFN)
-Python         :                   <- from Cell 1 output
-tabpfn version :                   <- from Cell 3 output
-sklearn version:
-numpy version  :
-Device         :                   <- cpu or T4 GPU
+=== RUN 002 — Google Colab, real TabPFN ===
+Date           : 2026-11-21 (run timestamp 2026-11-21T08:33:26 UTC)
+Script         : tabpfn_deletion_audit_colab.ipynb (real TabPFN, headless nbconvert)
+Python         : 3.13.18
+tabpfn version : 9.2.0  (default model V3_5/V3_5_FAST, repo "tabpfn_3_5")
+sklearn version: 1.6.1
+numpy version  : 2.4.6  |  pandas 2.2.3  |  scipy 1.16.3
+Device         : cpu
 Dataset        : Iris (sklearn built-in)
-Dataset hash   :                   <- must match 8145f023f195d965e6ca3d836e72a3ec
+Dataset hash   : 8145f023f195d965e6ca3d836e72a3ec  (matches Run 001)
 Random seed    : 42
 N trials       : 20
+Deleted rows   : [72,76,20,101,93,80,14,8,62,55,96,98,50,84,9,77,107,42,69,54]
 
 RESULTS (real TabPFN — thesis evidence if methodology is complete):
-  MAD mean=      std=      max=      min=
-  L2  mean=      std=
-  Blind baseline MAD mean=      std=
-  Excess MAD (real - blind) =
-  Wilcoxon statistic=     p=
-  Path A mean time=       Path B mean time=
-  Overhead of clean rebuild=
+  MAD mean=0.05553  std=0.06299  max=0.31141  min=0.01261
+  L2  mean=0.00713  std=0.00644
+  Blind baseline MAD mean=0.01823  std=0.00841
+  Excess MAD (real - blind) = 0.03730
+  Wilcoxon statistic= not emitted by notebook in this run
+    (fit_cache cells do emit Wilcoxon cache-vs-normal: p=0.4204)
+  Path A mean time= 5.49s    Path B mean time= 5.54s
+  Overhead of clean rebuild= 0.05s per deletion
+
+KV-CACHE (fit_with_cache) CELLS:
+  Sanity max|pred diff| same data = 2.24e-03  (~0, as expected)
+  Footprint: normal 0.06447, cache 0.06463, Wilcoxon p=0.4204 (no significant diff)
+  Probe mean P(true class) of deleted row: normal 0.954, cache 0.955 (chance 0.333)
+  Refit time: normal 0.40s, cache 4.46s
 
 CONCLUSION:
-  [fill in after run]
+  Naive delete (Path A, stale scaler) is NOT equivalent to a clean
+  rebuild (Path B): excess MAD of 0.03730 over the blind baseline.
+  Mechanism isolated: stale StandardScaler statistics only.
+  Clean rebuild costs ~0.05s per deletion on Iris/CPU — cheap here.
+  The refit model still assigns P(true class)=0.955 to the deleted row;
+  on Iris this is expected from class separability — a stronger MIA
+  probe is needed before any memorization claim.
 
 CAVEATS CHECKED:
-  [ ] Mechanism isolated: stale StandardScaler statistics only
-  [ ] Does NOT prove TabPFN internally memorises rows
-  [ ] Blind baseline included
-  [ ] 20 trials is pilot; 50+ trials x 3 seeds needed for thesis
-  [ ] Differentiated from tabcustody in writeup
+  [x] Mechanism isolated: stale StandardScaler statistics only
+  [x] Does NOT prove TabPFN internally memorises rows
+  [x] Blind baseline included (shuffled-label noise floor)
+  [x] 20 trials is pilot; 50+ trials x 3 seeds needed for thesis
+  [x] Differentiated from tabcustody in writeup
+
+STATUS: Complete. Demo deck (11 slides) slide 8 uses these numbers.
+Raw outputs: results/audit_results.json, results/fit_cache_results.json.
