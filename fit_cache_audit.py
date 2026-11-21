@@ -86,7 +86,7 @@ except ImportError:
     DEVICE = "cpu"
 
 # The two fit modes we compare
-MODE_NORMAL = "auto"            # Standard fit (recomputes attention per predict)
+MODE_NORMAL = "fit_preprocessors"            # Standard fit (recomputes attention per predict)
 MODE_CACHE  = "fit_with_cache"  # Precomputes KV cache during fit()
 
 # ===========================================================
@@ -136,7 +136,7 @@ def build_tabpfn(fit_mode: str) -> TabPFNClassifier:
     """
     Build a fresh TabPFN classifier in the given fit mode.
 
-    fit_mode="auto"            -> normal behaviour
+    fit_mode="fit_preprocessors"  -> normal behaviour
     fit_mode="fit_with_cache"  -> precomputes the KV cache during fit()
     A fresh instance per fit guarantees no state leaks between trials.
     """
