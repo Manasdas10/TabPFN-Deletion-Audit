@@ -85,7 +85,7 @@ def trial(c,kind,i):
  inputs={}; transform_s={}
  for mode,sc in [('A',c['stale']),('B',fresh)]:
   t=time.perf_counter();inputs[mode]=(sc.transform(X),sc.transform(c['T']));transform_s[mode]=time.perf_counter()-t
- record={'dataset':c['name'],'seed':c['seed'],'kind':kind,'trial':i,'deleted_local':d,'deleted_source':c['sourceids'][d].tolist(),'deleted_n':len(d),'retained_n':int(mask.sum()),'timestamp_utc':now(),'scaler_mean_delta_max':float(np.max(np.abs(c['stale'].mean_-fresh.mean_)))}
+ record={'dataset':c['name'],'seed':c['seed'],'kind':kind,'trial':i,'deleted_local':d,'deleted_source':c['sourceids'][d].tolist(),'deleted_n':len(d),'retained_n':int(mask.sum()),'scaler_fit_s':scaler_fit_s,'transform_s':transform_s,'timestamp_utc':now(),'scaler_mean_delta_max':float(np.max(np.abs(c['stale'].mean_-fresh.mean_)))}
  # Counterbalance execution order to reduce systematic timing order bias.
  order=['A','B'] if i%2==0 else ['B','A']
  for label,labels in [('real',c['y']),('blind',c['blind'])]:
