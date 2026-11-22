@@ -47,3 +47,9 @@ The API key is supplied only through a hidden notebook prompt and inherited proc
 - https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_covtype.html
 
 This document records the design, not results. Numerical claims require the actual Run 003 outputs.
+
+## Measurement clarification, 22 November 2026
+
+The runner now persists external scaler-fit and per-path transform times explicitly in each trial, in addition to complete pipeline times. This is additive recording only: no change to the 900-trial matrix or model fits. The old Run 002 timing difference cannot be decomposed retrospectively into scaler cost. Review the first planned identical-input repeat before causal attribution or scaling. Material disagreement requires investigation and a protocol decision; no additional repeat fits are authorized by this clarification.
+
+Use free non-commercial research licensing and free compute only. Do not start paid API use, enroll in billing, or upgrade compute. A paid requirement blocks that route and needs a free alternative without silently changing models.
